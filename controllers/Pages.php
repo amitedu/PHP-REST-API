@@ -30,4 +30,32 @@ class Pages
         return $statement;
     }
 
+
+    public function update($data)
+    {
+        $query = "UPDATE " . $this->table_name .
+            " SET orderId = :orderId,
+             title = :title, 
+             content = :content
+             WHERE id = :id";
+
+        $statement = $this->conn->prepare($query);
+
+        $statement->bindParam(':id', $data['id']);
+        $statement->bindParam(':orderId', $data['orderId']);
+        $statement->bindParam(':title', $data['title']);
+        $statement->bindParam(':content', $data['content']);
+
+//        $statement->bindParam(':id', $data->id);
+//        $statement->bindParam(':orderId', $data->orderId);
+//        $statement->bindParam(':title', $data->title);
+//        $statement->bindParam(':content', $data->content);
+
+        if ($statement->execute()) {
+            return true;
+        }
+
+        return false;
+    }
+
 }
