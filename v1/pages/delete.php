@@ -3,7 +3,6 @@
 header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json; charset-utf-8');
 header("Access-Control-Allow-Methods: *");
-//header("Access");
 
 include_once __DIR__ . '/../../Database.php';
 include_once __DIR__ . '/../../controllers/Pages.php';
@@ -13,13 +12,13 @@ $db = $database->getConnect();
 
 $item = new Pages($db);
 
-if ($item->update($_POST)) {
+if ($item->delete($_POST)) {
     http_response_code(200);
     echo json_encode(
         array(
             "type" => "success",
             "title" => "success",
-            "message" => "The page updated successfully"
+            "message" => "The page deleted successfully"
         )
     );
 } else {
@@ -28,7 +27,7 @@ if ($item->update($_POST)) {
         array(
             "type" => "failed",
             "title" => "failed",
-            "message" => "The page did not update successfully"
+            "message" => "The page did not deleted successfully"
         )
     );
 }

@@ -46,16 +46,35 @@ class Pages
         $statement->bindParam(':title', $data['title']);
         $statement->bindParam(':content', $data['content']);
 
-//        $statement->bindParam(':id', $data->id);
-//        $statement->bindParam(':orderId', $data->orderId);
-//        $statement->bindParam(':title', $data->title);
-//        $statement->bindParam(':content', $data->content);
-
         if ($statement->execute()) {
             return true;
         }
 
         return false;
+    }
+
+
+    public function delete($data)
+    {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+
+        $statement = $this->conn->prepare($query);
+        $statement->bindParam(':id', $data['id']);
+
+        return $statement->execute() && $statement->rowCount();
+    }
+
+    public function create(array $data)
+    {
+        $query = "INSERT INTO " . $this->table_name . " (orderId, slug, title, content) VALUES (:orderId, :slug, :title, :content)";
+        $statement = $this->conn->prepare($query);
+
+        $statement->bindParam(':orderId', $data['orderId']);
+        $statement->bindParam(':slug', $data['slug']);
+        $statement->bindParam(':title', $data['title']);
+        $statement->bindParam(':content', $data['content']);
+
+        return (bool)$statement->execute();
     }
 
 }
