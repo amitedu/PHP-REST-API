@@ -22,8 +22,8 @@ if ($itemCount > 0) {
     while ($row = $items->fetch()) {
         $arr['response'][] = $row;
     }
-
     echo json_encode($arr);
+
 } else {
     http_response_code(404);
 
