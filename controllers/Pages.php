@@ -3,8 +3,8 @@
 /**
  * @OA\Info(title="PHP-REST-API", version="1.0")
  */
-class Pages
-{
+class Pages {
+
     private $conn;
     private $table_name = 'pages';
 
@@ -25,9 +25,10 @@ class Pages
      */
     public function read()
     {
-        $query = "SELECT slug, title FROM " . $this->table_name . " ORDER BY orderId";
+        $query     = "SELECT slug, title FROM " . $this->table_name . " ORDER BY orderId";
         $statement = $this->conn->prepare($query);
         $statement->execute();
+
         return $statement;
     }
 
@@ -48,10 +49,12 @@ class Pages
      */
     public function single($slug)
     {
-        $query = "SELECT title, content FROM $this->table_name WHERE slug=:slug";
+        $query     = "SELECT title, content FROM $this->table_name WHERE slug=:slug";
         $statement = $this->conn->prepare($query);
+
         $statement->bindParam(':slug', $slug);
         $statement->execute();
+
         return $statement;
     }
 
@@ -118,9 +121,9 @@ class Pages
      */
     public function delete($data)
     {
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
-
+        $query     = "DELETE FROM " . $this->table_name . " WHERE id = :id";
         $statement = $this->conn->prepare($query);
+
         $statement->bindParam(':id', $data['id']);
 
         return $statement->execute() && $statement->rowCount();
@@ -149,7 +152,7 @@ class Pages
      */
     public function create(array $data)
     {
-        $query = "INSERT INTO " . $this->table_name . " (orderId, slug, title, content) VALUES (:orderId, :slug, :title, :content)";
+        $query     = "INSERT INTO " . $this->table_name . " (orderId, slug, title, content) VALUES (:orderId, :slug, :title, :content)";
         $statement = $this->conn->prepare($query);
 
         $statement->bindParam(':orderId', $data['orderId']);
@@ -157,6 +160,7 @@ class Pages
         $statement->bindParam(':title', $data['title']);
         $statement->bindParam(':content', $data['content']);
 
-        return (bool)$statement->execute();
+        return (bool) $statement->execute();
     }
+
 }
