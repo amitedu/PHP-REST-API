@@ -11,26 +11,46 @@ $db = $database->getConnect();
 
 $stmt = new Pages($db);
 $item = $stmt->single($_POST['slug']);
-$itemCount = $item->rowCount();
 
-if ($itemCount > 0) {
-    http_response_code(200);
+if ($item) {
+    $itemCount = $item->rowCount();
+    if ($itemCount > 0) {
+        http_response_code(200);
 
-    $arr = array();
-    $arr['response'] = array();
-    $arr['count'] = $itemCount;
+        $arr             = array();
+        $arr['response'] = array();
+        $arr['count']    = $itemCount;
 
-    while ($row = $item->fetch()) {
-        $arr['response'][] = $row;
+        while ($row = $item->fetch()) {
+            $arr['response'][] = $row;
+        }
+
+        try {
+            echo json_encode($arr, JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo "Can not create json";
+        }
+    } else {
+        http_response_code(404);
+
+        try {
+            echo json_encode(array(
+                'Type' => 'danger',
+                'title' => 'Failed',
+                'message' => 'No records found'
+            ), JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo "Can not create Json";
+        }
     }
-
-    echo json_encode($arr);
 } else {
-    http_response_code(404);
-
-    echo json_encode(array(
-        'Type' => 'danger',
-        'title' => 'Failed',
-        'message' => 'No records found'
-    ));
+    try {
+        echo json_encode(array(
+            'Type' => 'danger',
+            'title' => 'Failed',
+            'message' => 'Your token does not match'
+        ), JSON_THROW_ON_ERROR);
+    } catch (JsonException $e) {
+        echo "Can not create Json";
+    }
 }
